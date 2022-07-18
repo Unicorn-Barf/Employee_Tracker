@@ -17,11 +17,11 @@ const employeeQ = [
         message: 'What would you like to do?',
         name: 'task',
         type: 'list',
-        choices: ['View Employees', 'Edit Employee(s)'],
+        choices: ['View Employees', 'Edit Employees'],
     },
     {
         message: 'How would you like to view Employees?',
-        name: 'task',
+        name: 'view',
         type: 'list',
         choices: ['View All', 'By Manager', 'By Department'],
         when(answers) {
@@ -30,7 +30,7 @@ const employeeQ = [
     },
     {
         message: 'What would you like to do?',
-        name: 'task',
+        name: 'editTask',
         type: 'list',
         choices: ['Add Employee', 'Update Employee Role', 'Delete Employee'],
         when(answers) {
@@ -48,7 +48,7 @@ const roleQ = [
     },
     {
         message: 'How would you like to view Employees?',
-        name: 'task',
+        name: 'view',
         type: 'list',
         choices: ['View All', 'By Manager', 'By Department'],
         when(answers) {
@@ -58,7 +58,7 @@ const roleQ = [
     {
         message: 'What would you like to do?',
         name: 'task',
-        type: 'list',
+        type: 'editTask',
         choices: ['Add Employee', 'Update Employee Role', 'Delete Employee'],
         when(answers) {
             return answers.task === 'View Employees';
@@ -75,7 +75,7 @@ const departmentQ = [
     },
     {
         message: 'How would you like to view Employees?',
-        name: 'task',
+        name: 'view',
         type: 'list',
         choices: ['View All', 'By Manager', 'By Department'],
         when(answers) {
@@ -84,7 +84,7 @@ const departmentQ = [
     },
     {
         message: 'What would you like to do?',
-        name: 'task',
+        name: 'editTask',
         type: 'list',
         choices: ['Add Employee', 'Update Employee Role', 'Delete Employee'],
         when(answers) {
@@ -119,15 +119,33 @@ const init = async () => {
 }
 
 const manageEmployee = async () => {
-
+    const answers = await inquirer.prompt(employeeQ);
+    if (answers.task === 'View Employees') {
+        // handle displaying Employees to console
+    }
+    else {
+        // handle Editing Emplyees in the data base
+    }
 };
 
 const manageRole = async () => {
-
+    const answers = await inquirer.prompt(roleQ);
+    if (answers.task === 'View All Roles') {
+        // handle displaying Employees to console
+    }
+    else {
+        // handle Editing Emplyees in the data base
+    }
 };
 
 const manageDepartment = async () => {
-
+    const answers = await inquirer.prompt(departmentQ);
+    if (answers.task === 'View All Departments') {
+        // handle displaying Employees to console
+    }
+    else {
+        // handle Editing Emplyees in the data base
+    }
 };
 
 
