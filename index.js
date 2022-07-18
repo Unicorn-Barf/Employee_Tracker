@@ -1,5 +1,7 @@
 import inquirer from 'inquirer';
 import cTable from 'console.table';
+import { connection } from './db/connection.js';
+import { getAllEmployees } from './db/queries.js';
 
 
 // Create questions for inquire
@@ -34,7 +36,7 @@ const employeeQ = [
         type: 'list',
         choices: ['Add Employee', 'Update Employee Role', 'Delete Employee'],
         when(answers) {
-            return answers.task === 'View Employees';
+            return answers.task === 'Edit Employees';
         },
     }
 ];
@@ -122,6 +124,23 @@ const manageEmployee = async () => {
     const answers = await inquirer.prompt(employeeQ);
     if (answers.task === 'View Employees') {
         // handle displaying Employees to console
+        // 'View All', 'By Manager', 'By Department'
+        if (answers.view === 'View All') {
+            // display all the employees
+            try {
+                const employees = await connection.query(getAllEmployees);
+                console.table('All Employees', employees[0]);
+            } catch (error) {
+                
+            }
+        }
+        else if (answers.view === 'By Manager') {
+            // display all the employees joined by manager
+        }
+        else {
+            // display all the employees joined by department
+        }
+
     }
     else {
         // handle Editing Emplyees in the data base
