@@ -1,143 +1,23 @@
 import inquirer from 'inquirer';
 import cTable from 'console.table';
 import { connection } from './db/connection.js';
-import { rolesChoices, managerChoices, employeeChoices } from './utils/choices.js';
-import { 
+import { initQ, roleQ, employeeQ } from './utils/inquirerQuestions.js';
+import { rolesChoices, managerChoices, employeeChoices, departmentChoices } from './utils/choices.js';
+import {
     getAllEmployees,
     getEmployeesByManager,
     getEmployeesByDepartment,
     addEmployee,
     updateEmployeeRole,
-    deleteEmployee
+    deleteEmployee,
+    getAllRoles,
+    addRole,
+    deleteRole
 }
-from './db/queries.js';
+    from './db/queries.js';
 
 
 // Create questions for inquire
-const initQ = [
-    {
-        message: 'What would you like to do?',
-        name: 'task',
-        type: 'list',
-        choices: ['Manage Employees', 'Manage Roles', 'Manage Departments', 'Quit'],
-    }
-];
-
-const employeeQ = [
-    {
-        message: 'What would you like to do?',
-        name: 'task',
-        type: 'list',
-        choices: ['View Employees', 'Edit Employees'],
-    },
-    {
-        message: 'How would you like to view Employees?',
-        name: 'view',
-        type: 'list',
-        choices: ['View All', 'By Manager', 'By Department'],
-        when(answers) {
-            return answers.task === 'View Employees';
-        },
-    },
-    {
-        message: 'What would you like to do?',
-        name: 'editTask',
-        type: 'list',
-        choices: ['Add Employee', 'Update Employee Role', 'Delete Employee'],
-        when(answers) {
-            return answers.task === 'Edit Employees';
-        },
-    },
-    {
-        message: "What is the Employee's first name?",
-        name: 'first',
-        type: 'input',
-        when(answers) {
-            return answers.editTask === 'Add Employee';
-        },
-    },
-    {
-        message: "What is the Employee's last name?",
-        name: 'last',
-        type: 'input',
-        when(answers) {
-            return answers.editTask === 'Add Employee';
-        },
-    },
-    {
-        message: "What is the Employee's role?",
-        name: 'role',
-        type: 'list',
-        choices: await rolesChoices(),
-        when(answers) {
-            return answers.editTask === 'Add Employee';
-        },
-    },
-    {
-        message: "Who is the Employee's manager?",
-        name: 'manager',
-        type: 'list',
-        choices: await managerChoices(),
-        when(answers) {
-            return answers.editTask === 'Add Employee';
-        },
-    },
-    {
-        message: "Which Employee do you want to update?",
-        name: 'id',
-        type: 'list',
-        choices: await employeeChoices(),
-        when(answers) {
-            return answers.editTask === 'Update Employee Role';
-        },
-    },
-    {
-        message: "What is the Employee's role?",
-        name: 'role',
-        type: 'list',
-        choices: await rolesChoices(),
-        when(answers) {
-            return answers.editTask === 'Update Employee Role';
-        },
-    },
-    {
-        message: "Which Employee do you want to delete?",
-        name: 'id',
-        type: 'list',
-        choices: await employeeChoices(),
-        when(answers) {
-            return answers.editTask === 'Delete Employee';
-        },
-    },
-    
-];
-
-const roleQ = [
-    {
-        message: 'What would you like to do?',
-        name: 'task',
-        type: 'list',
-        choices: ['View All Roles', 'Edit Role(s)'],
-    },
-    {
-        message: 'How would you like to view Employees?',
-        name: 'view',
-        type: 'list',
-        choices: ['View All', 'By Manager', 'By Department'],
-        when(answers) {
-            return answers.task === 'View Employees';
-        },
-    },
-    {
-        message: 'What would you like to do?',
-        name: 'task',
-        type: 'editTask',
-        choices: ['Add Employee', 'Update Employee Role', 'Delete Employee'],
-        when(answers) {
-            return answers.task === 'View Employees';
-        },
-    }
-];
 
 const departmentQ = [
     {
@@ -223,8 +103,6 @@ const manageEmployee = async () => {
                 console.log(error);
             };
         };
-        // Call init() to see if user wants to quit or continue
-        init();
     }
     else {
         // handle Editing Employees in the data base
@@ -257,19 +135,45 @@ const manageEmployee = async () => {
                 console.log(error);
             };
         };
-        // Call init() to see if user wants to quit or continue
-        init();
-    }
+    };
+    // Call init() to see if user wants to quit or continue
+    init();
 };
 
 const manageRole = async () => {
     const answers = await inquirer.prompt(roleQ);
     if (answers.task === 'View All Roles') {
-        // handle displaying Employees to console
+        // handle displaying Roles to console
+        try {
+            const roles = await connection.query(getAllRoles);
+            console.table('\n\n\n\n\nAll Roles\n', roles[0], '\n');
+        } catch (error) {
+            console.log(error);
+        };
     }
     else {
-        // handle Editing Emplyees in the data base
+        // handle Editing Roles in the data base
+        if (answers.editTask === 'Add Role') {
+            // Add Role to Database
+            try {
+                await connection.query(addRole, [answers.title, answers.salary, answers.department]);
+                console.table('\n\n\n\n\nSuccess!!', '\n');
+            } catch (error) {
+                console.log(error);
+            };
+        }
+        // Handle Deleting a Role from the database
+        else {
+            try {
+                await connection.query(deleteRole, [answers.id]);
+                console.table('\n\n\n\n\nSuccess!!', '\n');
+            } catch (error) {
+                console.log(error);
+            };
+        }
     }
+    // Call init() to see if user wants to quit or continue
+    init();
 };
 
 const manageDepartment = async () => {
