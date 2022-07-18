@@ -1,8 +1,7 @@
 import inquirer from 'inquirer';
 import cTable from 'console.table';
 import { connection } from './db/connection.js';
-import { initQ, roleQ, employeeQ } from './utils/inquirerQuestions.js';
-import { rolesChoices, managerChoices, employeeChoices, departmentChoices } from './utils/choices.js';
+import { initQ, roleQ, employeeQ, departmentQ } from './utils/inquirerQuestions.js';
 import {
     getAllEmployees,
     getEmployeesByManager,
@@ -12,39 +11,12 @@ import {
     deleteEmployee,
     getAllRoles,
     addRole,
-    deleteRole
+    deleteRole,
+    getAllDepartments,
+    addDepartment,
+    deleteDepartment
 }
     from './db/queries.js';
-
-
-// Create questions for inquire
-
-const departmentQ = [
-    {
-        message: 'What would you like to do?',
-        name: 'task',
-        type: 'list',
-        choices: ['View All Departments', 'Edit Department(s)'],
-    },
-    {
-        message: 'How would you like to view Employees?',
-        name: 'view',
-        type: 'list',
-        choices: ['View All', 'By Manager', 'By Department'],
-        when(answers) {
-            return answers.task === 'View Employees';
-        },
-    },
-    {
-        message: 'What would you like to do?',
-        name: 'editTask',
-        type: 'list',
-        choices: ['Add Employee', 'Update Employee Role', 'Delete Employee'],
-        when(answers) {
-            return answers.task === 'View Employees';
-        },
-    }
-];
 
 
 
@@ -179,11 +151,37 @@ const manageRole = async () => {
 const manageDepartment = async () => {
     const answers = await inquirer.prompt(departmentQ);
     if (answers.task === 'View All Departments') {
-        // handle displaying Employees to console
+        // handle displaying Departments to console
+        try {
+            const departments = await connection.query(getAllDepartments);
+            console.table('\n\n\n\n\nAll Departments\n', departments[0], '\n');
+        } catch (error) {
+            console.log(error);
+        };
     }
     else {
-        // handle Editing Emplyees in the data base
+        // handle Editing Departments in the data base
+        if (answers.editTask === 'Add Department') {
+            // Add Role to Database
+            try {
+                await connection.query(addDepartment, [answers.name]);
+                console.table('\n\n\n\n\nSuccess!!', '\n');
+            } catch (error) {
+                console.log(error);
+            };
+        }
+        // Handle Deleting a Role from the database
+        else {
+            try {
+                await connection.query(deleteDepartment, [answers.id]);
+                console.table('\n\n\n\n\nSuccess!!', '\n');
+            } catch (error) {
+                console.log(error);
+            };
+        }
     }
+    // Call init() to see if user wants to quit or continue
+    init();
 };
 
 

@@ -38,6 +38,16 @@ VALUES (?, ?, ?);`;
 const deleteRole = `DELETE FROM role
 WHERE id = ?;`;
 
+// Department Queries
+const getAllDepartments = `SELECT d.id AS ID, d.name AS Department
+FROM department AS d;`;
+
+const addDepartment = `INSERT INTO department (name)
+VALUES (?)`;
+
+const deleteDepartment = `DELETE FROM department
+WHERE id = ?`;
+
 export {
     getAllEmployees,
     getEmployeesByManager,
@@ -47,5 +57,8 @@ export {
     deleteEmployee,
     getAllRoles,
     addRole,
-    deleteRole
+    deleteRole,
+    getAllDepartments,
+    addDepartment,
+    deleteDepartment
 }

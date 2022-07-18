@@ -1,5 +1,5 @@
 // These are choices functions for question object key 'choice'
-import { rolesChoices, managerChoices, employeeChoices } from './choices.js';
+import { rolesChoices, managerChoices, employeeChoices, departmentChoices } from './choices.js';
 
 // Question Objects for inquirer prompts
 
@@ -11,6 +11,42 @@ const initQ = [
         type: 'list',
         choices: ['Manage Employees', 'Manage Roles', 'Manage Departments', 'Quit'],
     }
+];
+
+// Inquirer prompt question for Department related input
+const departmentQ = [
+    {
+        message: 'What would you like to do?',
+        name: 'task',
+        type: 'list',
+        choices: ['View All Departments', 'Edit Departments'],
+    },
+    {
+        message: 'What would you like to do?',
+        name: 'editTask',
+        type: 'list',
+        choices: ['Add Department', 'Delete Department'],
+        when(answers) {
+            return answers.task === 'Edit Departments';
+        },
+    },
+    {
+        message: 'What is the Department name?',
+        name: 'name',
+        type: 'input',
+        when(answers) {
+            return answers.editTask === 'Add Department';
+        },
+    },
+    {
+        message: 'Which Department do you want to delete?',
+        name: 'id',
+        type: 'list',
+        choices: await departmentChoices(),
+        when(answers) {
+            return answers.editTask === 'Delete Department';
+        },
+    },
 ];
 
 // Inquirer prompt question for Role related input
@@ -160,4 +196,5 @@ export {
     initQ,
     roleQ,
     employeeQ,
+    departmentQ
 }
