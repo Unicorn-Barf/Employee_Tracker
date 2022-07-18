@@ -1,8 +1,37 @@
 // Sequel query commands for export
 
 
-const getAllEmployees = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', r.title AS Title, d.name AS Department, r.salary AS Salary, CONCAT(m.first_name, ', ', m.last_name) AS Manager FROM employee AS e INNER JOIN role AS r ON e.role_id = r.id LEFT JOIN employee AS m ON e.manager_id = m.id INNER JOIN department AS d ON  r.department_id = d.id;`;
+const getAllEmployees = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', r.title AS Title, d.name AS Department, r.salary AS Salary, CONCAT(m.first_name, ', ', m.last_name) AS Manager
+FROM employee AS e
+INNER JOIN role AS r ON e.role_id = r.id
+LEFT JOIN employee AS m ON e.manager_id = m.id
+INNER JOIN department AS d ON  r.department_id = d.id;`;
+
+const getEmployeesByManager = `SELECT CONCAT(m.first_name, ', ', m.last_name) AS Manager, e.id AS 'Employee ID', e.first_name AS 'First Name', e.last_name AS 'Last Name'
+FROM employee AS e
+INNER JOIN employee AS m ON e.manager_id = m.id
+GROUP BY Manager;`
+
+const getEmployeesByDepartment = `SELECT  d.name AS department, e.id AS 'Employee ID', e.first_name AS 'First Name', e.last_name AS 'Last Name'
+FROM employee AS e
+INNER JOIN role AS r ON e.role_id = r.id
+INNER JOIN department AS d ON r.department_id = d.id;`;
+
+const addEmployee = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES (?, ?, ?, ?);`;
+
+const updateEmployeeRole = `UPDATE employee
+SET role_id = ?
+WHERE id = ?;`;
+
+const deleteEmployee = `DELETE FROM employee
+WHERE id = ?;`;
 
 export {
     getAllEmployees,
+    getEmployeesByManager,
+    getEmployeesByDepartment,
+    addEmployee,
+    updateEmployeeRole,
+    deleteEmployee
 }

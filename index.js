@@ -1,7 +1,16 @@
 import inquirer from 'inquirer';
 import cTable from 'console.table';
 import { connection } from './db/connection.js';
-import { getAllEmployees } from './db/queries.js';
+import { rolesChoices, managerChoices, employeeChoices } from './utils/choices.js';
+import { 
+    getAllEmployees,
+    getEmployeesByManager,
+    getEmployeesByDepartment,
+    addEmployee,
+    updateEmployeeRole,
+    deleteEmployee
+}
+from './db/queries.js';
 
 
 // Create questions for inquire
@@ -38,7 +47,69 @@ const employeeQ = [
         when(answers) {
             return answers.task === 'Edit Employees';
         },
-    }
+    },
+    {
+        message: "What is the Employee's first name?",
+        name: 'first',
+        type: 'input',
+        when(answers) {
+            return answers.editTask === 'Add Employee';
+        },
+    },
+    {
+        message: "What is the Employee's last name?",
+        name: 'last',
+        type: 'input',
+        when(answers) {
+            return answers.editTask === 'Add Employee';
+        },
+    },
+    {
+        message: "What is the Employee's role?",
+        name: 'role',
+        type: 'list',
+        choices: await rolesChoices(),
+        when(answers) {
+            return answers.editTask === 'Add Employee';
+        },
+    },
+    {
+        message: "Who is the Employee's manager?",
+        name: 'manager',
+        type: 'list',
+        choices: await managerChoices(),
+        when(answers) {
+            return answers.editTask === 'Add Employee';
+        },
+    },
+    {
+        message: "Which Employee do you want to update?",
+        name: 'id',
+        type: 'list',
+        choices: await employeeChoices(),
+        when(answers) {
+            return answers.editTask === 'Update Employee Role';
+        },
+    },
+    {
+        message: "What is the Employee's role?",
+        name: 'role',
+        type: 'list',
+        choices: await rolesChoices(),
+        when(answers) {
+            return answers.editTask === 'Update Employee Role';
+        },
+    },
+    {
+        message: "Which Employee do you want to delete?",
+        name: 'id',
+        type: 'list',
+        choices: await employeeChoices(),
+        when(answers) {
+            return answers.editTask === 'Delete Employee';
+        },
+    },
+    
 ];
 
 const roleQ = [
@@ -129,21 +200,65 @@ const manageEmployee = async () => {
             // display all the employees
             try {
                 const employees = await connection.query(getAllEmployees);
-                console.table('All Employees', employees[0]);
+                console.table('\n\n\n\n\nAll Employees', employees[0], '\n');
             } catch (error) {
-                
-            }
+                console.log(error);
+            };
         }
         else if (answers.view === 'By Manager') {
-            // display all the employees joined by manager
+            // display all the employees grouped by manager
+            try {
+                const employees = await connection.query(getEmployeesByManager);
+                console.table('\n\n\n\n\nEmployees Grouped by Manager', employees[0], '\n');
+            } catch (error) {
+                console.log(error);
+            };
         }
         else {
             // display all the employees joined by department
-        }
-
+            try {
+                const employees = await connection.query(getEmployeesByDepartment);
+                console.table('\n\n\n\n\nEmployees Grouped by Department', employees[0], '\n');
+            } catch (error) {
+                console.log(error);
+            };
+        };
+        // Call init() to see if user wants to quit or continue
+        init();
     }
     else {
-        // handle Editing Emplyees in the data base
+        // handle Editing Employees in the data base
+        // answers.editTask
+        // 'Add Employee', 'Update Employee Role', 'Delete Employee'
+        if (answers.editTask === 'Add Employee') {
+            // Add Employee to Database
+            try {
+                await connection.query(addEmployee, [answers.first, answers.last, answers.role, answers.manager]);
+                console.table('\n\n\n\n\nSuccess!!', '\n');
+            } catch (error) {
+                console.log(error);
+            };
+        }
+        else if (answers.editTask === 'Update Employee Role') {
+            // Update an Employees Role
+            try {
+                await connection.query(updateEmployeeRole, [answers.role, answers.id]);
+                console.table('\n\n\n\n\nSuccess!!', '\n');
+            } catch (error) {
+                console.log(error);
+            };
+        }
+        else {
+            // Delete an Employee
+            try {
+                await connection.query(deleteEmployee, [answers.id]);
+                console.table('\n\n\n\n\nSuccess!!', '\n');
+            } catch (error) {
+                console.log(error);
+            };
+        };
+        // Call init() to see if user wants to quit or continue
+        init();
     }
 };
 
@@ -170,3 +285,4 @@ const manageDepartment = async () => {
 
 // init function to start code
 init();
+
