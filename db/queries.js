@@ -1,4 +1,4 @@
-// Sequel query commands for export
+// SQL query commands for export
 
 // Employee Queries
 const getAllEmployees = `SELECT e.id AS ID, e.first_name AS 'First Name', e.last_name AS 'Last Name', r.title AS Title, d.name AS Department, r.salary AS Salary, CONCAT(m.first_name, ', ', m.last_name) AS Manager
@@ -27,6 +27,7 @@ WHERE id = ?;`;
 const deleteEmployee = `DELETE FROM employee
 WHERE id = ?;`;
 
+
 // Role queries
 const getAllRoles = `SELECT r.title AS Title, r.id AS 'Role ID', d.name AS Department, CONCAT('$', r.salary) AS Salary
 FROM role AS r
@@ -37,6 +38,7 @@ VALUES (?, ?, ?);`;
 
 const deleteRole = `DELETE FROM role
 WHERE id = ?;`;
+
 
 // Department Queries
 const getAllDepartments = `SELECT d.id AS ID, d.name AS Department
