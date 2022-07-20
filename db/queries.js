@@ -7,7 +7,7 @@ INNER JOIN role AS r ON e.role_id = r.id
 LEFT JOIN employee AS m ON e.manager_id = m.id
 INNER JOIN department AS d ON  r.department_id = d.id;`;
 
-const getEmployeesByManager = `SELECT CONCAT(m.first_name, ', ', m.last_name) AS Manager, e.id AS 'Employee ID', e.first_name AS 'First Name', e.last_name AS 'Last Name'
+const getEmployeesByManager = `SELECT  CONCAT(m.first_name, ', ', m.last_name) AS Manager, GROUP_CONCAT(CONCAT(e.first_name, ' ', e.last_name) SEPARATOR ', ') AS 'Employees' 
 FROM employee AS e
 INNER JOIN employee AS m ON e.manager_id = m.id
 GROUP BY Manager;`
