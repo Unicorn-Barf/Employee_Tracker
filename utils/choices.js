@@ -1,3 +1,6 @@
+// File of functions to use for inquirer question choices
+// Will check the database for appropriate choices for 'choice:' key in question object
+
 import { connection } from '../db/connection.js';
 
 const departmentChoices = async () => {
