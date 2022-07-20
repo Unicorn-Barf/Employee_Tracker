@@ -8,6 +8,7 @@ import {
     getEmployeesByDepartment,
     addEmployee,
     updateEmployeeRole,
+    updateEmployeeManager,
     deleteEmployee,
     getAllRoles,
     addRole,
@@ -27,26 +28,6 @@ const init = async () => {
     // Run first inquire prompt to get what task user wants to do
     // 'Manage Employees', 'Manage Roles', 'Manage Departments', or 'Quit'
     // Call appropriate function
-    console.log(` /$$$$$$$$                      /$$                                    
-| $$_____/                     | $$                                    
-| $$      /$$$$$$/$$$$  /$$$$$$| $$ /$$$$$$ /$$   /$$ /$$$$$$  /$$$$$$ 
-| $$$$$  | $$_  $$_  $$/$$__  $| $$/$$__  $| $$  | $$/$$__  $$/$$__  $$
-| $$__/  | $$ \\ $$ \\ $| $$  \\ $| $| $$  \\ $| $$  | $| $$$$$$$| $$$$$$$$
-| $$     | $$ | $$ | $| $$  | $| $| $$  | $| $$  | $| $$_____| $$_____/
-| $$$$$$$| $$ | $$ | $| $$$$$$$| $|  $$$$$$|  $$$$$$|  $$$$$$|  $$$$$$$
-|________|__/ |__/ |__| $$____/|__/\\______/ \\____  $$\\_______/\\_______/
-                      | $$                  /$$  | $$                  
- /$$      /$$         | $$                 |  $$$$$$/                  
-| $$$    /$$$         |__/                  \\______/                   
-| $$$$  /$$$$ /$$$$$$ /$$$$$$$  /$$$$$$  /$$$$$$  /$$$$$$  /$$$$$$     
-| $$ $$/$$ $$|____  $| $$__  $$|____  $$/$$__  $$/$$__  $$/$$__  $$    
-| $$  $$$| $$ /$$$$$$| $$  \\ $$ /$$$$$$| $$  \\ $| $$$$$$$| $$  \\__/    
-| $$\\  $ | $$/$$__  $| $$  | $$/$$__  $| $$  | $| $$_____| $$          
-| $$ \\/  | $|  $$$$$$| $$  | $|  $$$$$$|  $$$$$$|  $$$$$$| $$          
-|__/     |__/\\_______|__/  |__/\\_______/\\____  $$\\_______|__/          
-                                        /$$  \\ $$                      
-                                       |  $$$$$$/                      
-                                        \\______/                       \n\n`);
     const task = await inquirer.prompt(initQ);
     if (task.task === 'Manage Employees') {
         manageEmployee();
@@ -110,9 +91,18 @@ const manageEmployee = async () => {
             };
         }
         else if (answers.editTask === 'Update Employee Role') {
-            // Update an Employees Role
+            // Update an Employee's Role
             try {
                 await connection.query(updateEmployeeRole, [answers.role, answers.id]);
+                console.table('\n\n\n\n\nSuccess!!', '\n');
+            } catch (error) {
+                console.log(error);
+            };
+        }
+        else if (answers.editTask === 'Update Employee Manager') {
+            // Update an Employee's Manager
+            try {
+                await connection.query(updateEmployeeManager, [answers.manager, answers.id]);
                 console.table('\n\n\n\n\nSuccess!!', '\n');
             } catch (error) {
                 console.log(error);
@@ -204,7 +194,26 @@ const manageDepartment = async () => {
     init();
 };
 
-
+console.log(` /$$$$$$$$                      /$$                                    
+| $$_____/                     | $$                                    
+| $$      /$$$$$$/$$$$  /$$$$$$| $$ /$$$$$$ /$$   /$$ /$$$$$$  /$$$$$$ 
+| $$$$$  | $$_  $$_  $$/$$__  $| $$/$$__  $| $$  | $$/$$__  $$/$$__  $$
+| $$__/  | $$ \\ $$ \\ $| $$  \\ $| $| $$  \\ $| $$  | $| $$$$$$$| $$$$$$$$
+| $$     | $$ | $$ | $| $$  | $| $| $$  | $| $$  | $| $$_____| $$_____/
+| $$$$$$$| $$ | $$ | $| $$$$$$$| $|  $$$$$$|  $$$$$$|  $$$$$$|  $$$$$$$
+|________|__/ |__/ |__| $$____/|__/\\______/ \\____  $$\\_______/\\_______/
+                      | $$                  /$$  | $$                  
+ /$$      /$$         | $$                 |  $$$$$$/                  
+| $$$    /$$$         |__/                  \\______/                   
+| $$$$  /$$$$ /$$$$$$ /$$$$$$$  /$$$$$$  /$$$$$$  /$$$$$$  /$$$$$$     
+| $$ $$/$$ $$|____  $| $$__  $$|____  $$/$$__  $$/$$__  $$/$$__  $$    
+| $$  $$$| $$ /$$$$$$| $$  \\ $$ /$$$$$$| $$  \\ $| $$$$$$$| $$  \\__/    
+| $$\\  $ | $$/$$__  $| $$  | $$/$$__  $| $$  | $| $$_____| $$          
+| $$ \\/  | $|  $$$$$$| $$  | $|  $$$$$$|  $$$$$$|  $$$$$$| $$          
+|__/     |__/\\_______|__/  |__/\\_______/\\____  $$\\_______|__/          
+                                        /$$  \\ $$                      
+                                       |  $$$$$$/                      
+                                        \\______/                       \n\n`);
 // init function to start code
 init();
 

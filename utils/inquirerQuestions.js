@@ -123,7 +123,7 @@ const employeeQ = [
         message: 'What would you like to do?',
         name: 'editTask',
         type: 'list',
-        choices: ['Add Employee', 'Update Employee Role', 'Delete Employee'],
+        choices: ['Add Employee', 'Update Employee Role', 'Update Employee Manager', 'Delete Employee'],
         when(answers) {
             return answers.task === 'Edit Employees';
         },
@@ -178,6 +178,24 @@ const employeeQ = [
         choices: await rolesChoices(),
         when(answers) {
             return answers.editTask === 'Update Employee Role';
+        },
+    },
+    {
+        message: "Which Employee do you want to update?",
+        name: 'id',
+        type: 'list',
+        choices: await employeeChoices(),
+        when(answers) {
+            return answers.editTask === 'Update Employee Manager';
+        },
+    },
+    {
+        message: "Who is the Employee's manager?",
+        name: 'manager',
+        type: 'list',
+        choices: await managerChoices(),
+        when(answers) {
+            return answers.editTask === 'Update Employee Manager';
         },
     },
     {

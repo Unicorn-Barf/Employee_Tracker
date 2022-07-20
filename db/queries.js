@@ -24,6 +24,10 @@ const updateEmployeeRole = `UPDATE employee
 SET role_id = ?
 WHERE id = ?;`;
 
+const updateEmployeeManager = `UPDATE employee
+SET manager_id = ?
+WHERE id = ?;`
+
 const deleteEmployee = `DELETE FROM employee
 WHERE id = ?;`;
 
@@ -56,6 +60,7 @@ export {
     getEmployeesByDepartment,
     addEmployee,
     updateEmployeeRole,
+    updateEmployeeManager,
     deleteEmployee,
     getAllRoles,
     addRole,
