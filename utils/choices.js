@@ -24,8 +24,6 @@ const departmentChoices = async () => {
     return roles[0];
  };
 
- console.log(await departmentChoices());
-
  export {
     rolesChoices,
     managerChoices,
