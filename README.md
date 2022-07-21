@@ -6,7 +6,7 @@
   - [The challenge](#the-challenge)
   - [User Story](#user-story)
   - [Acceptance Criteria](#acceptance-criteria)
-  - [Links](#links)
+  - [Instructions](#instructions)
 - [My process](#my-process)
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
@@ -54,9 +54,9 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 ​
 ​
-### Links
+### Instructions
 
-- Deployed Application: [https://nolans-note-taker.herokuapp.com/](https://nolans-note-taker.herokuapp.com/)
+- App Demo Video: [https://drive.google.com/file/d/1CH3aDv-rUXQOWGT5bJvRVvJKlrA7mw82/view](https://drive.google.com/file/d/1CH3aDv-rUXQOWGT5bJvRVvJKlrA7mw82/view)
 
 <br>
 
