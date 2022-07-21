@@ -54,6 +54,13 @@ VALUES (?)`;
 const deleteDepartment = `DELETE FROM department
 WHERE id = ?`;
 
+const viewBudget = `SELECT d.name AS Department, CONCAT('$', SUM(r.salary)) AS Budget
+FROM employee AS e
+INNER JOIN role AS r ON e.role_id = r.id
+INNER JOIN department AS d ON r.department_id = d.id
+WHERE d.id = ?
+GROUP BY Department;`;
+
 export {
     getAllEmployees,
     getEmployeesByManager,
@@ -67,5 +74,6 @@ export {
     deleteRole,
     getAllDepartments,
     addDepartment,
-    deleteDepartment
+    deleteDepartment,
+    viewBudget
 }

@@ -19,7 +19,16 @@ const departmentQ = [
         message: 'What would you like to do?',
         name: 'task',
         type: 'list',
-        choices: ['View All Departments', 'Edit Departments'],
+        choices: ['View All Departments', 'View a Department Budget', 'Edit Departments'],
+    },
+    {
+        message: "Which Department's budget do you want to see?",
+        name: 'id',
+        type: 'list',
+        choices: await departmentChoices(),
+        when(answers) {
+            return answers.task === 'View a Department Budget';
+        },
     },
     {
         message: 'What would you like to do?',

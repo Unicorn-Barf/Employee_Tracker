@@ -15,7 +15,8 @@ import {
     deleteRole,
     getAllDepartments,
     addDepartment,
-    deleteDepartment
+    deleteDepartment,
+    viewBudget
 }
     from './db/queries.js';
 
@@ -68,7 +69,7 @@ const manageEmployee = async () => {
             };
         }
         else {
-            // display all the employees joined by department
+            // display all the employees grouped by department
             try {
                 const employees = await connection.query(getEmployeesByDepartment);
                 console.table('\n\n\n\n\nEmployees Grouped by Department', employees[0], '\n');
@@ -169,10 +170,19 @@ const manageDepartment = async () => {
             console.log(error);
         };
     }
+    else if (answers.task === 'View a Department Budget') {
+        // handle displaying a specific departments total budget
+        try {
+            const budget = await connection.query(viewBudget, [answers.id]);
+            console.table('\n\n\n\n\nTotal Budget\n', budget[0], '\n');
+        } catch(error) {
+            console.log(error);
+        };
+    }
     else {
         // handle Editing Departments in the data base
         if (answers.editTask === 'Add Department') {
-            // Add Role to Database
+            // Add Department to Database
             try {
                 await connection.query(addDepartment, [answers.name]);
                 console.table('\n\n\n\n\nSuccess!!', '\n');
@@ -180,7 +190,7 @@ const manageDepartment = async () => {
                 console.log(error);
             };
         }
-        // Handle Deleting a Role from the database
+        // Handle Deleting a Department from the database
         else {
             try {
                 await connection.query(deleteDepartment, [answers.id]);
@@ -194,6 +204,7 @@ const manageDepartment = async () => {
     init();
 };
 
+// Cute app title on start of application
 console.log(` /$$$$$$$$                      /$$                                    
 | $$_____/                     | $$                                    
 | $$      /$$$$$$/$$$$  /$$$$$$| $$ /$$$$$$ /$$   /$$ /$$$$$$  /$$$$$$ 
