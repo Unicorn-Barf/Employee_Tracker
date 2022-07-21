@@ -1,8 +1,8 @@
 import inquirer from 'inquirer';
 import cTable from 'console.table';
 import { connection } from './db/connection.js';
-import { initQ, roleQ, departmentQ } from './utils/inquirerQuestions.js';
 import { rolesChoices, managerChoices, employeeChoices, departmentChoices } from './utils/choices.js';
+
 import {
     getAllEmployees,
     getEmployeesByManager,
@@ -20,6 +20,7 @@ import {
     viewBudget
 }
     from './db/queries.js';
+
 
 
 
