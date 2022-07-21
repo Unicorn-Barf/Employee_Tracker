@@ -58,8 +58,7 @@ const viewBudget = `SELECT d.name AS Department, CONCAT('$', SUM(r.salary)) AS B
 FROM employee AS e
 INNER JOIN role AS r ON e.role_id = r.id
 INNER JOIN department AS d ON r.department_id = d.id
-WHERE d.id = ?
-GROUP BY Department;`;
+WHERE d.id = ?;`;
 
 export {
     getAllEmployees,
